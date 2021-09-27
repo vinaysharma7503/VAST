@@ -6,7 +6,7 @@ const env = require('../environment/env');
 function initilization() {
     setupDatabase();
     setupBodyParser();
-    //setUpRoutes();
+    setupRoutes();
     setupError404Handler();
     setupErrorHandler();
 }
@@ -25,6 +25,13 @@ function setupDatabase() {
 function setupBodyParser() {
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
+}
+
+function setupRoutes() {
+    //Admin Routes
+    app.use('/api/v1/admin');
+    //User Routes
+    app.use('/api/v1/user');
 }
 
 function setupError404Handler() {
