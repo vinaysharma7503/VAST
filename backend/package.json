@@ -1,0 +1,17 @@
+{
+    "name": "vast",
+    "version": "1.0.0",
+    "description": "Vast Electronics & Services Backend",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "SET NODE_ENV=production && nodemon index.js",
+        "dev": "SET NODE_ENV=developement && nodemon index.js"
+    },
+    "author": "Vinay Sharma",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1",
+        "mongoose": "^6.0.8"
+    }
+}
