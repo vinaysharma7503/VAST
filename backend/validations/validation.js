@@ -5,7 +5,7 @@ exports.userRegister = ((req, res) => {
     return [
         body('email', 'Email is required.').isEmail()
             .custom(async (result, { req }) => {
-                const response = await user.find({email:result});// []
+                const response = await user.find({ email: result });// []
                 if (response.length > 0) {  // true  // null undefiend false
                     req.errorStatus = 409; // 409 Unprocessable Entity
                     throw new Error('This email is already registered.');
@@ -13,13 +13,13 @@ exports.userRegister = ((req, res) => {
                     return true
                 }
             }),
-            body('username', 'Username is required.')
+        body('username', 'Username is required.')
             .matches('[0-9]').withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
             .matches(/(?=.[!@#$_%^&.])/).withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
             .matches('[A-Z]').withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
             .matches('[a-z]').withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
             .custom(async (result, { req }) => {
-                const response = await user.find({username:result});
+                const response = await user.find({ username: result });
 
                 if (response.length > 0) {
                     req.errorStatus = 409; // 409 Unprocessable Entity
@@ -30,9 +30,30 @@ exports.userRegister = ((req, res) => {
             }),
         check('password', 'Password is required.').isLength({ min: 8 })
             .matches('[0-9]').withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
-            .matches(/(?=.[!@#$_%^&])/).withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
+            .matches(/(?=.[!@#$_%^&.])/).withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
             .matches('[A-Z]').withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
             .matches('[a-z]').withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
             .trim().escape()
     ]
 });
+
+exports.userLogin = ((req, res) => {
+    return [
+        check('password', 'Password is required').exists().isLength({ min: 8 })
+            .matches('[0-9]').withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
+            .matches(/(?=.[!@#$_%^&.])/).withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
+            .matches('[A-Z]').withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
+            .matches('[a-z]').withMessage('Username must contain at least 1 Number, Special Character, Lowercase, and Uppercase Letter.')
+            .trim().escape(),
+        body('email', 'Email is required.').isEmail().custom(async (result, { req }) => {
+            const response = await user.find({ email: result });
+            if (Boolean(response.length)) {
+                req.userData = response[0];
+                return true;
+            } else {
+                req.errorStatus = 400;
+                throw new Error('The above email does not exist in our system.');
+            }
+        })
+    ]
+})

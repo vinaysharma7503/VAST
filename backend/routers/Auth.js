@@ -16,7 +16,7 @@ function getRoutes() {
 }
 
 function postRoutes() {
-    //router.post('/signin',)
+    router.post('/signin',GlobalMiddleware.formDataParser,Validation.userLogin(),GlobalMiddleware.ractifyError,AuthController.signin);
     router.post('/signup',GlobalMiddleware.formDataParser,Validation.userRegister(),GlobalMiddleware.ractifyError,AuthController.signup);
 }
 module.exports = router;
