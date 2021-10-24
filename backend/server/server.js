@@ -2,6 +2,7 @@ const express = require('express');
 const Mongoose = require('mongoose');
 const app = express();
 const env = require('../environment/env');
+const userRoutes = require('../routers/Auth');
 
 function initilization() {
     setupDatabase();
@@ -29,9 +30,9 @@ function setupBodyParser() {
 
 function setupRoutes() {
     //Admin Routes
-    app.use('/api/v1/admin');
+    //app.use('/api/v1/admin');
     //User Routes
-    app.use('/api/v1/user');
+    app.use('/api/v1/user',userRoutes);
 }
 
 function setupError404Handler() {
